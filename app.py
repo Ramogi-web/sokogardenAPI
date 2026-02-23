@@ -86,7 +86,7 @@ def signin():
             return jsonify({"message": "User logged in successfully", "user":user})
 
 #Below is the route for adding products
-@app.route ("/api/add_product", methods=["POST"])
+@app.route("/api/add_product", methods=["POST"])
 def Addproducts():
     if request.method=="POST":
         #extract the data entered from the phone
@@ -121,12 +121,11 @@ def Addproducts():
         #create a tuple that will hold all the data content from the form
         data=(product_name, product_description,product_cost, filename)
 
-        # use the cursor to execute the sqlas you replace the placeholders with the actual data
+        # use the cursor to execute the sqls you replace the placeholders with the actual data
         cursor.execute(sql,data)
 
         #commit the changes to the database
         connection.commit()
-
 
         return jsonify({"message":"product added successfully"})
 
@@ -134,6 +133,28 @@ def Addproducts():
 
 
 
+
+
+# Below is the route for fetching products
+@app.route("/api/get_products")
+def get_products():
+    #create a connection to db
+    connection =pymysql.connect(host="localhost", user="root", password="", database="sokogardenonline")
+
+    #create a cursor
+    cursor = connection.cursor(pymysql.cursors)
+
+    #structure the query to fetch all  the products from the table products_details
+    sql="SELECT * FROM product_details"
+
+    # execute the query
+    cursor.execute(sql)
+
+    # create a variable that holds the data fetched from the table
+    products=cursor.fetchall()
+
+
+    return jsonify(products)
 
 
 
